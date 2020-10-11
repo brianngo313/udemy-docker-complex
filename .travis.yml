@@ -1,0 +1,15 @@
+sudo: required
+services:
+    - docker
+
+before_install:
+    - docker build -t brianngo313/react-test -f ./client/Dockerfile.dev .
+
+script:
+    - docker run -r CI=true brianngo313/react-test npm test
+
+after_success:
+    - docker build -t brianngo313/multi-client ./client
+    - docker build -t brianngo313/multi-nginx ./nginx
+    - docker build -t brianngo313/multi-server ./server
+    - docker build -t brianngo313/multi-worker ./worker
